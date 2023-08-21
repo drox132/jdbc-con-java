@@ -6,6 +6,8 @@ private Integer id;
 private String nombre;
 private String descripcion;
 private Integer cantidad;
+private Integer categoriaId;
+
 
 
 
@@ -14,7 +16,7 @@ public Producto (String nombre, String descripcion, Integer cantidad) {
 	this.setDescripcion(descripcion);
 	this.setCantidad(cantidad);
 }
-public Producto(int id, String nombre, String descripcion, int cantidad) {
+public Producto(Integer id, String nombre, String descripcion, Integer cantidad) {
 	this.setId(id);
 	this.setNombre(nombre);
 	this.setDescripcion(descripcion);
@@ -22,9 +24,16 @@ public Producto(int id, String nombre, String descripcion, int cantidad) {
 	
 }
 
-
-public Producto() {
+//constuctor para guardar la categoria del producto tambien 
+public Producto(String nombre, String descripcion, Integer cantidad, Integer categoriaId) {
+	this.setNombre(nombre);
+	this.setDescripcion(descripcion);
+	this.setCantidad(cantidad);
+	this.setCategoriaId(categoriaId);
 }
+
+
+
 
 public Integer getId() {
 	return id;
@@ -51,6 +60,12 @@ public void setCantidad(Integer cantidad) {
 	this.cantidad = cantidad;
 }
 
+public Integer getCategoriaId() {
+	return categoriaId;
+}
+public void setCategoriaId(Integer categoriaId) {
+	this.categoriaId = categoriaId;
+}
 
 
 }

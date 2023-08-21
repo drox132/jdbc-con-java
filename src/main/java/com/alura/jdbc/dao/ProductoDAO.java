@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alura.jdbc.conectionfactory.ConexionMySql;
+import com.alura.jdbc.modelo.Categoria;
 import com.alura.jdbc.modelo.Producto;
 
 public class ProductoDAO {
@@ -59,13 +60,14 @@ public class ProductoDAO {
 			final Connection con = new ConexionMySql().establecerConexion();
 
 		try(con){
-	    	String sql = "INSERT INTO TBPRODUCTO (NOMBRE,DESCRIPCION,CANTIDAD) VALUES (?,?,? )"; 
+	    	String sql = "INSERT INTO TBPRODUCTO (NOMBRE,DESCRIPCION,CANTIDAD,CATEGORIA_ID) VALUES (?,?,?,? )"; 
 	    	
 	    		final PreparedStatement stment = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 	    		try(stment){
 	    			stment.setString(1, producto.getNombre());
 	            	stment.setString(2, producto.getDescripcion());
 	            	stment.setInt(3, producto.getCantidad());
+	            	stment.setInt(4, producto.getCategoriaId());
 	               	stment.execute();
 	            		
 	            	final ResultSet resultSet = stment.getGeneratedKeys();
@@ -140,6 +142,36 @@ public class ProductoDAO {
 			throw new RuntimeException(e);
 		}
 		
+	}
+
+	public List<Producto> listar(Integer categoria) {
+List<Producto> resultado = new ArrayList<>();
+		
+		final Connection con = new ConexionMySql().establecerConexion();
+		try(con){
+			String sql ="SELECT * FROM TBPRODUCTO WHERE CATEGORIA_ID= ?";
+
+			final PreparedStatement ps = con.prepareStatement(sql);
+			try(ps){
+				ps.setInt(1, categoria);
+				final ResultSet resultSet =  ps.executeQuery();
+				try(resultSet){
+					while (resultSet.next()) {
+						Producto lineaProducto = new Producto(
+								resultSet.getInt("ID_PRODUCTO"),
+								resultSet.getString("NOMBRE"),
+								resultSet.getString("DESCRIPCION"),
+								resultSet.getInt("CANTIDAD")
+								);
+						
+						resultado.add(lineaProducto);
+					}
+				}
+			}
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return resultado;
 	}
 	
 
